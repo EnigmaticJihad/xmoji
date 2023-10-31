@@ -1,4 +1,4 @@
-# 🍋 Xmoji - Emoji Selector Script
+# 🍋 Xmoji - Emoji Selector 
 
 Xmoji is a simple shell script that allows you to select and copy emoji characters to your clipboard using dmenu.
 
@@ -23,4 +23,4 @@ cd .. && rm -rf xmoji
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.

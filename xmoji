@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Import Colorscheme
+. "${HOME}/.cache/wal/colors.sh"
+
+# Define the cache directory
+cache_dir="$HOME/.cache/xmoji"
+
+# Ensure the cache directory exists
+mkdir -p "$cache_dir"
+
+# Define the cache file for the emoji data
+cache_file="$cache_dir/emoji.json"
+
+# Check if the cache file is older than 1 day and update it
+if [ ! -f "$cache_file" ] || [ $(find "$cache_file" -mtime +1) ]; then
+    # Define the URL of the emoji source
+    emoji_source="https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json"
+
+    # Use curl to fetch the emoji data and save it to the cache file
+    curl -s -o "$cache_file" "$emoji_source"
+    
+    # Convert Unicode escape sequences to emoji characters in the cache file
+    sed -i 's/\\u[0-9A-Fa-f]\{4\}/\n/g' "$cache_file"
+    sed -i ':a;N;$!ba;s/\n/ /g' "$cache_file"
+fi
+
+# Extract emoji characters and names from the JSON cache
+emoji_data=$(jq -r 'to_entries | .[] | .key + " " + .value' "$cache_file")
+
+# Use dmenu to select an emoji
+selected=$(echo "$emoji_data" | dmenu -nb "$color0" -nf "$color15" -sb "$color1" -sf "$color15" -p "🍋 Select Emoji:")
+
+# Check if the user made a selection
+if [ -n "$selected" ]; then
+    # Extract the emoji from the selected item
+    emoji=$(echo "$selected" | awk '{print $2}')
+    
+    # Copy the selected emoji to the clipboard using xclip
+    echo -n -e "$emoji" | xclip -selection clipboard
+fi

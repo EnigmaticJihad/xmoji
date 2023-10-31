@@ -1,7 +1,29 @@
 #!/bin/bash
 
-# Import Colorscheme
-. "${HOME}/.cache/wal/colors.sh"
+########################################################
+#             Xmoji - Emoji Selector Script            #
+########################################################
+
+# Author: zed
+# Email: enigmatic.jihad@protonmail.com
+
+# Description: Xmoji is a script that lets you select and
+# copy emoji characters to your clipboard using dmenu.
+
+# Usage: xmoji
+
+# Options:
+# -v, --version Display the script version.
+
+if [[ "$1" == "-v" || "$1" == "--version" ]]; then
+    echo "Xmoji Version 1.0"
+    exit 0
+fi
+
+# Import Colorscheme (if you use pywal colorscheme or have your own colorscheme; uncomment the following line.)
+# and in line 52 add the following flags in demnu command.
+# dmenu -nb "$color0" -nf "$color15" -sb "$color1" -sf "$color15"
+#. "${HOME}/.cache/wal/colors.sh"
 
 # Define the cache directory
 cache_dir="$HOME/.cache/xmoji"
@@ -29,7 +51,7 @@ fi
 emoji_data=$(jq -r 'to_entries | .[] | .key + " " + .value' "$cache_file")
 
 # Use dmenu to select an emoji
-selected=$(echo "$emoji_data" | dmenu -nb "$color0" -nf "$color15" -sb "$color1" -sf "$color15" -p "🍋 Select Emoji:")
+selected=$(echo "$emoji_data" | dmenu -p "🍋 Select Emoji:")
 
 # Check if the user made a selection
 if [ -n "$selected" ]; then
